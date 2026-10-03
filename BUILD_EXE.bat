@@ -1,45 +1,18 @@
 @echo off
-title Build PS5 FFPFSC PRO v1.3.0
-echo ============================================================
-echo  PS5 FFPFSC PRO v1.3.0 - EXE Builder
-echo ============================================================
-echo.
-echo Installing / updating dependencies...
-py -m pip install customtkinter pillow pyinstaller mkpfs==0.0.9 tkinterdnd2 py7zr rarfile cryptography
-echo.
-
-echo Cleaning previous build...
+title Build PS5 FFPFSC PRO
+cd /d "%~dp0"
+if not exist ".venv\Scripts\python.exe" (py -3 -m venv .venv 2>nul || python -m venv .venv)
+".venv\Scripts\python.exe" -m pip install --disable-pip-version-check -q -r requirements.txt pyinstaller
+if errorlevel 1 goto :fail
 rmdir /s /q build 2>nul
-rmdir /s /q dist  2>nul
-
+rmdir /s /q dist 2>nul
+".venv\Scripts\python.exe" -m PyInstaller --noconfirm ps5ffpfsc.spec
+if errorlevel 1 goto :fail
 echo.
-echo Running syntax check...
-py -m py_compile PS5_FFPFSC_PRO_v1.3.0.py
-if errorlevel 1 (
-  echo [FAIL] Syntax check failed on PS5_FFPFSC_PRO_v1.3.0.py
-  pause
-  exit /b 1
-)
-py -m py_compile backend\cli.py
-if errorlevel 1 (
-  echo [FAIL] Syntax check failed on backend\cli.py
-  pause
-  exit /b 1
-)
-echo Syntax OK.
-
-echo.
-echo Building EXE...
-py -m PyInstaller PS5_FFPFSC_PRO_v1.3.0.spec
-if errorlevel 1 (
-  echo [FAIL] PyInstaller build failed.
-  pause
-  exit /b 1
-)
-
-echo.
-echo ============================================================
-echo  Build complete!
-echo  Output: dist\PS5_FFPFSC_PRO.exe
-echo ============================================================
+echo Done: dist\PS5-FFPFSC-PRO.exe
 pause
+exit /b 0
+:fail
+echo Build failed - see the messages above.
+pause
+exit /b 1

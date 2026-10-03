@@ -1,0 +1,18 @@
+[project]
+name = "ps5ffpfsc"
+version = "2.0.0"
+description = "Compress PS5 game dumps to .ffpfsc and unpack them again"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["backend"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"ps5ffpfsc/ui/icons.py" = ["E501"]  # SVG path data

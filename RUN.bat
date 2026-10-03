@@ -1,10 +1,20 @@
 @echo off
-title PS5 FFPFSC PRO v1.3.0
-echo.
-echo  PS5 FFPFSC PRO v1.3.0
-echo  IMPORTANT: Extract the ZIP first. Do not run from inside the ZIP.
-echo.
-py -m pip install customtkinter pillow mkpfs==0.0.9 tkinterdnd2 py7zr rarfile cryptography pypresence
-py PS5_FFPFSC_PRO_v1.3.0.py
-if errorlevel 1 python PS5_FFPFSC_PRO_v1.3.0.py
-pause
+title PS5 FFPFSC PRO
+cd /d "%~dp0"
+if not exist ".venv\Scripts\python.exe" (
+  echo First start: creating a private Python environment ^(one time only^)...
+  py -3 -m venv .venv 2>nul || python -m venv .venv
+  if errorlevel 1 (
+    echo Python 3.11 or newer is required: https://www.python.org/downloads/
+    pause
+    exit /b 1
+  )
+)
+echo Checking dependencies...
+".venv\Scripts\python.exe" -m pip install --disable-pip-version-check -q -r requirements.txt
+if errorlevel 1 (
+  echo Installing dependencies failed. See the messages above.
+  pause
+  exit /b 1
+)
+start "" ".venv\Scripts\pythonw.exe" run.py %*

@@ -1,22 +1,14 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-.Python
 *.egg-info/
-dist/
-build/
-*.spec.bak
+.venv/
+.pytest_cache/
+.ruff_cache/
 
 # PyInstaller output
-dist/
 build/
-
-# App data / logs (generated at runtime)
-*.log
-*.json
-!requirements*.txt
+dist/
 
 # OS
 .DS_Store
@@ -27,3 +19,9 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# Large PS5 image files
+*.ffpfs
+*.ffpfsc
+*.exfat
+*.ffpkg

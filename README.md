@@ -1,258 +1,189 @@
-
-<h1 align="center">🚀 PS5 FFPFSC PRO</h1>
+<h1 align="center">PS5 FFPFSC PRO</h1>
 
 <p align="center">
-  PS5 Game Compression Utility
+  Compress PS5 game dumps into <code>.ffpfsc</code> images — and unpack them again.<br>
+  A fast, modern desktop app for Windows, Linux and macOS. Fully offline.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Windows-Supported-blue">
-  <img src="https://img.shields.io/badge/Linux-Supported-yellow">
-  <img src="https://img.shields.io/badge/macOS-Supported-lightgrey">
-  <img src="https://img.shields.io/badge/Backend-MkPFS%20%2B%20FFPFSC-orange">
-  <img src="https://img.shields.io/badge/Version-v1.3.0-green">
+  <img src="https://img.shields.io/badge/version-2.0.0-4d8dff">
+  <img src="https://img.shields.io/badge/Windows%20%C2%B7%20Linux%20%C2%B7%20macOS-supported-3ddc97">
+  <img src="https://img.shields.io/badge/UI-PySide6%20(Qt%206)-41cd52">
+  <img src="https://img.shields.io/badge/backend-MkPFS%200.0.9-orange">
+  <img src="https://img.shields.io/badge/network-none-lightgrey">
 </p>
 
 <p align="center">
-  <a href="https://github.com/KINGDKAK/PS5-FFPFSC-PRO/releases">📥 Download</a> •
-  <a href="https://youtube.com/@KINGDKAK">📺 YouTube</a> •
-  <a href="https://ko-fi.com/KINGDKAK">☕ Ko-fi</a>
+  <img src="screenshots/compress-running-dark.png" alt="Compressing a queue of games" width="900">
 </p>
 
 ---
 
-## 📦 About
+## What's new in 2.0
 
-PS5 FFPFSC PRO is a cross-platform GUI for compressing PlayStation 5 game dumps using MkPFS and FFPFSC.
+Version 2.0 is a ground-up rewrite of the app around the same MkPFS backend.
 
-The application supports Windows, Linux, and macOS.
-
-The goal is simple: make PS5 game compression easy without requiring command-line tools or complicated setup.
-
-Whether you're compressing a single game, batch processing multiple titles, or browsing community compatibility reports, everything can be done from one interface.
-
----
-
-## 🖼️ Screenshots
-
-### Main Window
-
-![PS5 FFPFSC PRO Main Window](screenshots/main-window.png)
-
-### Community Compatibility Database
-
-![Community Database](screenshots/community-database.png)
-
-
-### Compression Progress
-
-![Compression Progress](screenshots/compression-progress.png)
+- **A new interface.** Built with Qt 6: a sidebar layout, drag and drop anywhere, a live job bar showing stages, speed and ETA, and dark and light themes.
+- **Unpack and browse.** Open any `.ffpfsc` and see the game inside: title, icon, title ID, version and the full file tree. Extract everything or just the files you tick. No temp files are needed.
+- **Old images open too.** Older `.ffpfsc` files (built before the MkPFS 0.0.9 single-pass pipeline, with a nested `pfs_image.dat` inside) unpack just like new ones.
+- **Real verification.** *Verify image after building* reads every file back out of the new image and compares it byte-for-byte with your source.
+- **Standalone executable.** The packaged app runs the compression engine itself, so no separate Python installation is needed.
+- **Fully offline.** The app never opens a network connection.
+- **Safer by default.** Existing output is never overwritten silently (you get `PPSA01234 (2).ffpfsc`). Partial files are cleaned up on cancel or failure, and AMPR files added to your game folder are removed again afterwards.
 
 ---
 
-## ✨ Features
+## Screenshots
 
-* Compress PS5 game dumps into .ffpfsc
-* Supports game folders, .exfat, .ffpkg, .zip, .rar, and .7z
-* Drag-and-drop support
-* Batch compression
-* Multi-image queueing
-* Compression tuning options
-* Compression presets (Fast, Balanced, Max Compression, Low RAM)
-* Automatic update checker
-* Live RAM meter
-* Automatic retry on out-of-memory errors
-* Detailed logs and progress tracking
-* Per-game output folders
-* Compact mode
-* Interactive feature tour
-* What's New dialog after updates
-* Community Compatibility Database
-* APR / AMPR game support
----
-
-## 📂 Supported Inputs
-
-* PS5 game folders
-* `.exfat` images
-* `.ffpkg` images
-* `.zip` archives
-* `.rar` archives
-* `.7z` archives
+| Compress | Unpack |
+|---|---|
+| ![Compress queue](screenshots/compress-done-dark.png) | ![Unpack and browse](screenshots/unpack-dark.png) |
+| ![Compress, light theme](screenshots/compress-running-light.png) | ![Unpack, light theme](screenshots/unpack-light.png) |
+| **Activity log** | **Settings** |
+| ![Activity log](screenshots/activity-dark.png) | ![Settings](screenshots/settings-dark.png) |
 
 ---
 
-## 🌐 Community Compatibility Database
+## Features
 
-After a successful compression, you can optionally submit your results to the community database.
+### Compress
+- Drop **game folders**, **`.exfat` / `.ffpkg` images** or **`.zip` / `.7z` / `.rar` archives**. You can drop one or a whole folder of games; dumps are found automatically (a folder containing `eboot.bin` and `sce_sys/`).
+- Queue as many games as you like. Each row shows the game's icon, title, title ID and version.
+- **Presets:** *Fast*, *Balanced*, *Max* and *Low RAM*, or tune the compression level, CPU cores and block size yourself.
+- Live progress through every stage (*Extract archive → Prepare → Build image → Verify*), with throughput and time remaining.
+- **Out-of-memory protection.** Very large games automatically use fewer cores. If a job still runs out of RAM, it's retried with half the cores.
+- Archives are extracted to your temp folder and cleaned up afterwards. Password-protected archives are detected and you're asked for the password.
+- Pre-flight checks warn about FAT32 output drives (4 GB file limit) and low disk space.
 
-The database allows users to:
+### Unpack
+- Open `.ffpfsc`, `.ffpfs`, `.exfat` and `.ffpkg` images, several at once.
+- See the game's icon, title, ID and version, the image size vs. game size, and how much space compression saved.
+- Browse the full file tree with sizes, filter by name, and tick exactly what you want.
+- **Extract all** or **Extract selected**. Files stream straight from the compressed image to disk, so memory use stays low even for 100 GB games.
+- **Verify** checks the image structure and decodes every file, testing the checksum of each compressed block (see [Verification](#verification)).
 
-* Share compatibility reports
-* Report Working / Partial / Not Working / Not Tested Yet status
-* Search by game name
-* Search by Title ID
-* View report counts
-* View ShadowMount version information
-* Browse compatibility reports directly from the application
-* Duplicate submission protection
-* Vote-based reporting system
-* Submit results directly from the application
-* Filter by compatibility status
-* Browse over 5,000+ community compatibility reports
-
-Compatibility status is vote-based so one incorrect report cannot override community results.
-
-View the live compatibility database:
-
-https://docs.google.com/spreadsheets/d/1dgu0p7U2yB_mhcUELz-Wkc7Yhs-avoWLY1Gcm0n5XJw/edit?usp=drive_web&ouid=115958744890792485831
-
-Or access it directly from PS5 FFPFSC PRO.
+### APR / AMPR games
+APR titles are detected automatically through `sce_sys/playgo-chunk.dat`, and you can tick **APR / AMPR** on any game by hand. Before compressing, `libSceAmpr.sprx` and `libScePlayGo.sprx` are copied into the game's `fakelib/` folder, and MkPFS builds `ampr_emu.index`. Set the folder holding those two files once in **Settings**. By default they're removed from your source folder again when the job finishes; the image keeps them.
 
 ---
 
-## ⚙️ Compression Tuning
+## Download
 
-Advanced users can fine-tune compression using:
+Prebuilt apps are attached to each [release](https://github.com/minusxne/PS5-FFPFSC-PRO/releases):
 
-* Compression level selection
-* CPU core selection
-* Block size selection
+| Platform | File | Notes |
+|---|---|---|
+| Windows 10/11 (x64) | `PS5-FFPFSC-PRO-Windows-x64.zip` | Unzip and run `PS5-FFPFSC-PRO.exe`. |
+| macOS (Apple Silicon) | `PS5-FFPFSC-PRO-macOS-arm64.zip` | The app is unsigned: right-click → **Open** the first time. |
+| Linux (x64) | `PS5-FFPFSC-PRO-Linux-x64.tar.gz` | `chmod +x PS5-FFPFSC-PRO` and run it. |
 
-Available block sizes:
+Releases are built by GitHub Actions whenever a `v*` tag is pushed (see `.github/workflows/build.yml`).
 
-* Auto
-* Auto-Fit
-* 16384
-* 32768
-* 65536
+## Run from source
 
-Smaller block sizes may improve results for games containing large numbers of small files.
+You need **Python 3.11 or newer**.
 
-Compression Presets
-* 🚀 Fast
-* ⚖️ Balanced
-* 🗜️ Max Compression
-* 💾 Low RAM
+- **Windows:** double-click `RUN.bat`.
+- **Linux / macOS:** run `./run.sh`.
 
-Presets automatically configure compression level, CPU cores, and block size.
+The first start creates a private `.venv` and installs the dependencies from `requirements.txt` (PySide6, zlib-ng, cryptography, py7zr, rarfile). Later starts are instant.
 
----
+To do it manually:
 
-## 🎮 AMPR / APR Support
+```bash
+python -m venv .venv
+.venv/bin/pip install -r requirements.txt      # Windows: .venv\Scripts\pip ...
+.venv/bin/python run.py
+```
 
-PS5 FFPFSC PRO can detect games that require the AMPR emulator.
+You can also pass files on the command line: `run.py Game.ffpfsc` opens it on the Unpack page, and a game folder goes to the Compress queue.
 
-Features include:
+## Build the executable yourself
 
-* Automatic PlayGo chunk detection
-* Automatic APR title detection
-* Automatic AMPR index generation
-* Dedicated AMPR folder configuration
-* Compatibility reporting support
-* Batch mode support
+- **Windows:** run `BUILD_EXE.bat`. The result is `dist\PS5-FFPFSC-PRO.exe`.
+- **Linux / macOS:** run `./build.sh`. The result is `dist/PS5-FFPFSC-PRO` or `dist/PS5-FFPFSC-PRO.app`.
+
+Both use `ps5ffpfsc.spec` (PyInstaller) and produce a single file with no Python dependency.
 
 ---
 
-📊 Monitoring & Automation
+## Formats
 
+| You have | What it is | Compress | Unpack / browse |
+|---|---|:---:|:---:|
+| Game folder (`eboot.bin`, `sce_sys/`) | A raw PS5 dump | ✅ | — |
+| `.exfat` / `.ffpkg` | A raw exFAT image of a game | ✅ | ✅ |
+| `.zip` / `.7z` / `.rar` | An archive containing a dump or image | ✅ | — |
+| `.ffpfsc` (MkPFS 0.0.9+, this app) | Compressed PFS → exFAT | output | ✅ |
+| `.ffpfsc` (older builds) | Compressed PFS → nested PFS (`pfs_image.dat`) | — | ✅ |
+| `.ffpfs` | Plain PFS image | — | ✅ |
 
-* Live RAM meter
-* Automatic update checking
-* Windows completion notifications
-* Automatic retry on memory errors
-* Real-time progress tracking
+Output files are named after the title ID, for example `PPSA01234.ffpfsc`. Copy them to your PS5's internal storage or a USB drive, then open ShadowMount and let it scan.
 
+## Compression settings
 
----
+| Preset | Level | Cores | Block size | Use it when |
+|---|:---:|:---:|:---:|---|
+| Fast | 3 | Auto | Auto | You want results quickly and don't mind slightly larger files |
+| Balanced | 6 | Auto | Auto | A good default for most games |
+| **Max** (default) | 9 | Auto | Auto | You want the smallest files |
+| Low RAM | 6 | 1 | 16 KiB | Your PC has little memory, or a game keeps running out of RAM |
 
-🎓 User Experience
+**Block size:** *Auto* uses 64 KiB blocks. *Auto-fit* picks the block size that wastes the least padding, which helps games with many small files.
 
+## Verification
 
-* Interactive feature tour
-* What's New dialog after updates
-* Full Help / FAQ section
-* Detailed logging
-* Resizable log panel
-* Compact mode
+There are two different checks, and they catch different things:
 
-
-
----
-
-## 🚀 Getting Started
-
-1. Download the latest release.
-2. Run `PS5_FFPFSC_PRO.exe`
-3. Add a game folder, archive, `.exfat`, or `.ffpkg` image.
-4. Select your compression settings.
-5. Click **Start**.
-
-The application handles the rest.
+| Check | Where | What it does |
+|---|---|---|
+| **Verify image after building** | Compress options | Reads every file back out of the finished image and compares it byte-for-byte with the source. This is the strongest check, but it needs the original files. |
+| **Verify** | Unpack page | Checks the image structure, then decodes every file. Every *compressed* block carries a zlib checksum, so truncated copies and damaged compressed data are caught. Blocks stored *uncompressed* (data that doesn't compress, such as already-compressed game assets) have no checksum in the format, so damage there can only be found by comparing with the original files. |
 
 ---
 
-## 🛠️ Common Issues
+## Troubleshooting
 
-### Out of Memory
-
-Try:
-
-* Lowering CPU cores
-* Lowering compression level
-* Closing other applications
-
-### Disk Full
-
-Ensure sufficient free space exists in both:
-
-* Output folder
-* Temporary folder
-
-### Write Errors
-
-Verify that:
-
-* Output locations are valid
-* Drives are writable
-* Storage devices have enough free space
-
-The application provides detailed error messages and recommended fixes whenever possible.
+| Problem | Fix |
+|---|---|
+| **"No RAR extractor found"** | RAR needs an external tool. Install [7-Zip](https://www.7-zip.org/) or WinRAR (Windows), or `unrar` / `7zip` / `bsdtar` (Linux/macOS). ZIP and 7z work out of the box. |
+| **Output drive is FAT32** | FAT32 can't store files over 4 GB. Choose an NTFS, exFAT, APFS or ext4 drive. |
+| **Out of memory** | The app retries automatically with fewer cores. If it keeps happening, use the *Low RAM* preset. |
+| **Linux: the app doesn't start under X11** | Qt 6 needs `libxcb-cursor0` (Debian/Ubuntu: `sudo apt install libxcb-cursor0`). Wayland sessions work without it. |
+| **Something failed** | Open **Activity**: it has the full log, including MkPFS's own output. **Settings → Open log folder** has the logs of the last 10 sessions to attach to a bug report. |
 
 ---
 
-## 🙏 Credits
+## For developers
 
-### Compression Backend
+```
+ps5ffpfsc/
+  core/            Qt-free logic
+    games.py         game/source detection, param.json, APR detection
+    image_reader.py  layered reader for every image format; browse, extract, verify
+    archives.py      zip / 7z / rar extraction with progress
+    worker.py        job worker subprocess (compress / unpack / verify)
+  ui/              PySide6 interface
+    runner.py        runs jobs in the worker, tracks progress, retries, cancels
+    compress_page.py, unpack_page.py, activity_page.py, settings_page.py
+    jobbar.py, widgets.py, theme.py, icons.py
+backend/mkpfs/     vendored MkPFS 0.0.9 (pinned: the image reader uses its internals)
+tests/             pytest suite (core, worker subprocess and offscreen UI tests)
+```
 
-* MkPFS
-* Bizkut
+**How jobs run.** The app re-launches itself as `--worker` for every job and sends it a JSON job description. The worker runs MkPFS in-process, routes its progress bars into structured events on stdout, and reports partial outputs so they can be cleaned up. Running jobs in a separate process keeps the window responsive, lets **Cancel** stop MkPFS's whole process tree immediately, and means an out-of-memory crash can never take the UI down.
 
-### Community
+**Tests.** Fixtures are built with MkPFS, covering every image layout, including the old nested format:
 
-Special thanks to everyone testing games, submitting compatibility reports, reporting bugs, and helping improve the project.
-
----
-
-## 🔗 Links
-
-📺 YouTube
-https://youtube.com/@KINGDKAK
-
-☕ Ko-fi
-https://ko-fi.com/KINGDKAK
-
-📥 Releases
-https://github.com/KINGDKAK/PS5-FFPFSC-PRO/releases
-
----
-
-## ⚠️ Disclaimer
-
-This project is provided as-is.
-
-Only use content you legally own and follow all applicable laws in your region.
+```bash
+pip install pytest
+QT_QPA_PLATFORM=offscreen pytest -q
+```
 
 ---
 
-⭐ If you find the project useful, consider starring the repository and contributing compatibility reports to help the community.
+## Credits
+
+- Original **PS5 FFPFSC PRO** by [KINGDKAK](https://github.com/KINGDKAK/PS5-FFPFSC-PRO). This version is a fork and rewrite of that project.
+- Image building by [**MkPFS**](https://github.com/PSBrew/MkPFS) (PSBrew).
+- Original command-line backend by [bizkut](https://github.com/bizkut/ps5-ffpfs-cli).

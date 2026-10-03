@@ -3,7 +3,55 @@
 ════════════════════════════════════════════════════════════════════════
 
 ────────────────────────────────────────────────────────────────────────
-  v1.3.0  (current)
+  v2.0.0  (current)
+────────────────────────────────────────────────────────────────────────
+
+COMPLETE REWRITE — NEW INTERFACE (PySide6 / Qt 6)
+
+  • New sidebar layout: Compress · Unpack · Activity · Settings
+  • Drag and drop anywhere in the window; files are routed to the right page
+  • Live job bar with stage steps, progress, throughput, ETA and Cancel
+  • Dark and light themes (or match the system)
+  • Codebase split into a Qt-free core and a UI package, with a test suite
+
+UNPACK & BROWSE (NEW)
+
+  • Open .ffpfsc / .ffpfs / .exfat / .ffpkg images and browse the game inside:
+    icon, title, title ID, version, sizes, and the full file tree
+  • Extract everything, or only the files and folders you tick
+  • Streams straight from the compressed image — no temp files, flat memory
+  • Older .ffpfsc files with a nested pfs_image.dat open and extract too
+  • Verify: structure check plus a full decode of every file
+
+COMPRESSION
+
+  • Verify after building now reads every file back from the image and
+    compares it byte-for-byte with the source (previously structure-only)
+  • Out-of-memory jobs are retried automatically with fewer CPU cores
+  • Existing outputs are never overwritten silently — "PPSA01234 (2).ffpfsc"
+    (overwriting can be turned on in Settings)
+  • Cancel stops mkpfs and all of its worker processes immediately and
+    removes partial output and temp files
+  • Password-protected archives are detected and the password is asked once
+  • AMPR files injected into a game folder are removed again afterwards
+    (the image keeps them); can be turned off in Settings
+  • Presets: Fast (3) · Balanced (6) · Max (9) · Low RAM (6, 1 core, 16 KiB)
+
+PACKAGING
+
+  • The packaged executable runs the compression engine itself — a separate
+    Python installation is no longer required
+  • RUN.bat / run.sh create a private .venv on first start
+  • GitHub Actions builds Windows, macOS and Linux releases on version tags
+
+REMOVED
+
+  • Community compatibility database and Google Sheet integration
+  • Update checker — the app is now fully offline
+  • Unused bundled UnRAR C++ sources and the old bizkut CLI/GUI wrappers
+
+────────────────────────────────────────────────────────────────────────
+  v1.3.0
 ────────────────────────────────────────────────────────────────────────
 
 MkPFS 0.0.9 — SINGLE-PASS PIPELINE UPGRADE
